@@ -46,7 +46,6 @@ AWS_ACCESS_KEY_ID=your_access_key
 AWS_SECRET_ACCESS_KEY=your_secret_key
 AWS_REGION=ap-northeast-1
 S3_BUCKET=sample
-FORCE_PATH_STYLE=true
 
 # MinIO環境用のエンドポイント設定
 MINIO_ENDPOINT=http://minio:9000
