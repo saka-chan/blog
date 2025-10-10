@@ -33,27 +33,6 @@ Digeonでは「積み木開発」という独自の開発手法を採用して�
 
 AWS S3と互換性のあるオープンソースストレージ「[MinIO](https://www.min.io/)」を利用し、ローカルでも同一APIでファイルアップロード機能を動かせるようにしました。
 
-### 環境変数でストレージ設定を切替可能にする
-アプリケーション側では、環境変数によって利用するストレージを切り替えます。
-
-```bash
-# true: MinIO / false: AWS S3
-IS_ON_PREMISE_STORAGE=true 
-
-# 共通のS3互換設定
-AWS_ACCESS_KEY_ID=your_access_key
-AWS_SECRET_ACCESS_KEY=your_secret_key
-AWS_REGION=ap-northeast-1
-S3_BUCKET=sample
-
-# MinIO用設定
-MINIO_ENDPOINT=http://minio:9000
-MINIO_PRESIGN_ENDPOINT=http://localhost:9000
-```
-
-アプリケーションはこのフラグを参照して、S3クライアントまたはMinIOクライアントを自動的に選択します。  
-ローカルからS3へ接続したい場合は、アクセスキー等を設定した上でフラグを切り替えればOKです。プロダクション環境でも同じコードがS3へ接続するため、環境ごとの差異を気にせず開発できるようになっています。
-
 ### docker-composeでMinIOを自動起動する
 
 開発用の`docker-compose.yml`に、MinIOのサービスを定義しています。  
@@ -83,8 +62,30 @@ mc:
 ```
 
 MinIO Client（`mc`）が初回起動時に`sample`バケットを自動作成します。  
-`docker compose up`を実行するだけでMinIOが自動起動し、ローカルで即座に利用可能になります。  
-ブラウザから `http://localhost:9001` にアクセスすれば、Webコンソールでオブジェクトの状態確認も可能です。
+
+`docker compose up`を実行するだけでMinIOが自動起動し、ファイルアップロード機能が**ローカルで即座に利用可能**になります。  
+また、ブラウザから `http://localhost:9001` にアクセスすれば、Webコンソールでオブジェクトの状態確認も可能です。
+
+### 環境変数でストレージ設定を切替可能にする
+アプリケーション側では、環境変数によって利用するストレージを切り替えます。
+
+```bash
+# true: MinIO / false: AWS S3
+IS_ON_PREMISE_STORAGE=true 
+
+# 共通のS3互換設定
+AWS_ACCESS_KEY_ID=your_access_key
+AWS_SECRET_ACCESS_KEY=your_secret_key
+AWS_REGION=ap-northeast-1
+S3_BUCKET=sample
+
+# MinIO用設定
+MINIO_ENDPOINT=http://minio:9000
+MINIO_PRESIGN_ENDPOINT=http://localhost:9000
+```
+
+アプリケーションはこのフラグを参照して、S3クライアントまたはMinIOクライアントを自動的に選択します。  
+ローカルからS3へ接続したい場合は、アクセスキー等を設定した上でフラグを切り替えればOKです。プロダクション環境でも同じコードがS3へ接続するため、環境ごとの差異を気にせず開発できるようになっています。
 
 ---
 
